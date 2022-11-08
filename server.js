@@ -22,8 +22,8 @@ app.get("/petition/thank-you", (req, res) => {
 });
 
 app.get("/petition/signers", (req, res) => {
+    getSigner().then((signer) => res.render("signers", { signer }));
     // console.log("response", res);
-    res.render("signers");
 });
 
 app.listen(8080, () => console.log("The Server is listen to 8080"));

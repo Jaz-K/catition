@@ -1,5 +1,9 @@
 <header></header>
 <main>
+    <h1>SIGN FOR ???</h1>
+    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt temporibus
+        facilis fugiat odio! Assumenda magnam, labore ullam impedit ex, placeat
+        iure dolorum rerum beatae autem, rem incidunt recusandae est obcaecati?</p>
     <section>
         <form action="/petition" method="POST">
             <label for="fname">First Name</label>
@@ -8,7 +12,11 @@
             <input type="text" name="last_name" id="lname" required />
             <label for="sig" Signature></label>
             <input type="hidden" name="signature" id="sig" required />
-            <canvas id="signature-field"></canvas>
+            <canvas id="signature-field" width="300px" height="80px"></canvas>
+
+            <button type="submit">Sign</button>
         </form>
     </section>
 </main>
+
+<script src="/canvas.js"></script>

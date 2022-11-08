@@ -50,3 +50,9 @@ function renderSign(x, y) {
     mouseY = y;
     ctx.stroke();
 }
+// RESET signature
+const reset = document.querySelector("#reset");
+
+reset.addEventListener("click", () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+});

@@ -17,7 +17,7 @@ app.get("/petition", (req, res) => {
 });
 app.post("/petition", async (req, res) => {
     // console.log("POST", req.body);
-    console.log("body log", req.body.signature);
+    // console.log("body log", req.body.signature);
     try {
         await signUp(
             req.body.first_name,

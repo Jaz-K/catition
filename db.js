@@ -16,11 +16,11 @@ function signUp(first_name, last_name, signature) {
         .query(
             `
     INSERT INTO signatures (first_name, last_name, signature)
-    VALUES($1,$2,$3,$4)
+    VALUES ($1,$2,$3)
     `,
             [first_name, last_name, signature]
         )
-        .then((result) => result.row[0]);
+        .then((result) => result.rows[0]);
 }
 
 // edit profile

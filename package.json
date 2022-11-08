@@ -5,7 +5,8 @@
     "main": "server.js",
     "scripts": {
         "test": "jest",
-        "start": "nodemon server.js"
+        "start": "nodemon server.js",
+        "db": "psql -d spiced-petition -f setup.sql"
     },
     "engines": {
         "node": "14.15.1"

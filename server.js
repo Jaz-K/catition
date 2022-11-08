@@ -15,6 +15,21 @@ app.get("/petition", (req, res) => {
     // console.log("response", res);
     res.render("petition");
 });
+app.post("/petition", async (req, res) => {
+    // console.log("POST", req.body);
+    console.log("body log", req.body.signature);
+    try {
+        await signUp(
+            req.body.first_name,
+            req.body.last_name,
+            req.body.signature
+        );
+        res.redirect("/petition/thank-you");
+    } catch (error) {
+        console.log("error", error);
+        res.render("petition", { error: "Something went wrong" });
+    }
+});
 
 app.get("/petition/thank-you", (req, res) => {
     // console.log("response", res);

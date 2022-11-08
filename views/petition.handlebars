@@ -1,4 +1,6 @@
-<header></header>
+<header>
+    <a href="/petition/signers">Signers</a>
+</header>
 <main>
     <h1>SIGN FOR ???</h1>
     <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt temporibus
@@ -11,10 +13,13 @@
             <label for="lname">Last Name</label>
             <input type="text" name="last_name" id="lname" required />
             <label for="sig" Signature></label>
-            <input type="hidden" name="signature" id="sig" required />
-            <canvas id="signature-field" width="300px" height="80px"></canvas>
+            <input type="hidden" name="signature" id="sig" value="" />
+            <canvas id="signature-field"></canvas>
 
             <button type="submit">Sign</button>
+            {{#if error}}
+                <p class="error">{{error}}</p>
+            {{/if}}
         </form>
     </section>
 </main>

@@ -16,11 +16,11 @@ main {
     flex-direction: column;
     justify-content: center;
 }
-form {
+/* form {
     display: flex;
     flex-direction: column;
     margin-top: 3rem;
-}
+} */
 footer {
     text-align: center;
 }

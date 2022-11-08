@@ -1,54 +1,52 @@
 const canvas = document.querySelector("#signature-field");
 const ctx = canvas.getContext("2d");
+const hiddenInput = document.querySelector("#sig");
+// console.log(hiddenInput);
+// console.log("canvas datas", signatureData);
+
+const offsetX = canvas.offsetLeft;
+const offsetY = canvas.offsetTop;
+
+console.log(offsetX);
+console.log(offsetY);
+
 canvas.width = 300;
-canvas.height = 80;
+canvas.height = 50;
 ctx.strokeStyle = "#264653";
 ctx.lineWidth = 2;
 
 let signing = false;
-let mousePosition = {
-    x: 0,
-    y: 0,
-};
+let mouseX = 0;
+let mouseY = 0;
 
-let lastPosition = mousePosition;
-
+// console.log(mouseX);
 canvas.addEventListener("mousedown", (event) => {
     signing = true;
-    lastPosition = getMousePosition(canvas, event);
-    console.log("mousedown", event);
+    mouseX = event.clientX - offsetX;
+    mouseY = event.clientY - offsetY;
+    // console.log("mousedown", event);
 });
 
-canvas.addEventListener("mouseup", (event) => {
+canvas.addEventListener("mouseup", () => {
     signing = false;
-    console.log("mouseup", event);
+    // console.log("mouseup", event);
+    let signatureData = canvas.toDataURL();
+    // console.log(signatureData);
+    hiddenInput.value = signatureData;
 });
 
 canvas.addEventListener("mousemove", (event) => {
-    mousePosition = getMousePosition(canvas, event);
-    console.log("mouse is moving", event);
+    if (signing) {
+        // console.log("mouse is moving", event);
+        renderSign(event.clientX - offsetX, event.clientY - offsetY);
+    }
 });
 
-function getMousePosition(canvas, mouseEvent) {
-    const signArea = canvas.getBoundingClientRect();
-    return {
-        x: mouseEvent.clientX - signArea.left,
-        y: mouseEvent.clientY - signArea.top,
-    };
+function renderSign(x, y) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(mouseX, mouseY);
+    mouseX = x;
+    mouseY = y;
+    ctx.stroke();
 }
-
-function renderCanvas() {
-    if (signing) {
-        ctx.moveTo(lastPosition.x, lastPosition.y);
-        ctx.lineTo(mousePosition.x, mousePosition.y);
-        ctx.stroke();
-        lastPosition = mousePosition;
-    }
-}
-
-renderCanvas();
-
-// x: mouseEvent.clientX - rect.left,
-// y: mouseEvent.clientY - rect.top
-
-//clear button clearCanvas()

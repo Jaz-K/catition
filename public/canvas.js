@@ -3,7 +3,7 @@ const ctx = canvas.getContext("2d");
 const hiddenInput = document.querySelector("#sig");
 
 canvas.width = 300;
-canvas.height = 100;
+canvas.height = 50;
 ctx.strokeStyle = "#fff";
 ctx.lineWidth = 2;
 
@@ -55,4 +55,5 @@ const reset = document.querySelector("#reset");
 
 reset.addEventListener("click", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    hiddenInput.value = "";
 });

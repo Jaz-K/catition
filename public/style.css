@@ -32,13 +32,13 @@ header {
     justify-content: space-between;
 }
 
-header a {
+a.nav {
     text-decoration: transparent;
     color: rgb(255, 255, 255);
-    transition: text-decoration 1s ease-in;
+    transition: text-decoration 0.3s ease-in;
 }
 
-header a:hover {
+a.nav:hover {
     text-decoration: underline;
 }
 nav {
@@ -102,14 +102,16 @@ button {
     cursor: crosshair;
 }
 .logo {
+    color: rgb(255, 255, 255);
     font-family: "Comfortaa", Arial, Helvetica, sans-serif;
     font-weight: 700;
     text-transform: uppercase;
+    text-decoration: none;
     font-size: 3rem;
-    color: rgb(255, 255, 255);
 }
 
 .logout {
+    color: rgb(255, 255, 255);
     background-color: rgb(172, 25, 20);
     padding: 0.25rem 1.5rem;
     font-size: 1.25rem;
@@ -119,10 +121,16 @@ button {
 }
 
 .moreSigners {
+    margin-top: 2rem;
+    display: inline-block;
     color: rgb(255, 255, 255);
     padding: 0.25rem 1.5rem;
     font-size: 1.25rem;
     border-radius: 1rem;
     text-decoration: none;
     border: 2px solid rgb(255, 255, 255);
+}
+
+.error {
+    color: rgb(172, 25, 20);
 }

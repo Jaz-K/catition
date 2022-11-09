@@ -11,12 +11,13 @@ function getSigner() {
 }
 // sign up
 
-function signUp(first_name, last_name, signature) {
+function signUp({ first_name, last_name, signature }) {
     return db
         .query(
             `
     INSERT INTO signatures (first_name, last_name, signature)
     VALUES ($1,$2,$3)
+    RETURNING *
     `,
             [first_name, last_name, signature]
         )

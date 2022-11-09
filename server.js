@@ -22,15 +22,22 @@ app.use(
 );
 
 app.get("/petition", (req, res) => {
+    const signature_id = req.session.signatures_id;
+    if (signature_id) {
+        res.redirect("/petition/thank-you");
+        return;
+    }
     // console.log("response", res);
     res.render("petition");
 });
+
 app.post("/petition", async (req, res) => {
     console.log("POST", req.body);
     // console.log("body log", req.body.signature);
     try {
-        await signUp(req.body);
-        req.session.signatures_id = req.body.id;
+        const newSigner = await signUp(req.body);
+        req.session.signatures_id = newSigner.id;
+        console.log("SESSION", req.session);
         res.redirect("/petition/thank-you");
     } catch (error) {
         console.log("error", error);
@@ -41,7 +48,7 @@ app.post("/petition", async (req, res) => {
 });
 
 app.get("/petition/thank-you", async (req, res) => {
-    if (!req.session.signature_id) {
+    if (!req.session.signatures_id) {
         res.redirect("/petition");
     }
     const signer = await getSigner();

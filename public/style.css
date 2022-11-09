@@ -130,6 +130,10 @@ button {
     text-decoration: none;
     border: 2px solid rgb(255, 255, 255);
 }
+img.signature {
+    margin: 2rem 0;
+    display: block;
+}
 
 .error {
     color: rgb(172, 25, 20);

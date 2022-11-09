@@ -3,7 +3,7 @@ const express = require("express");
 const { engine } = require("express-handlebars");
 const cookieSession = require("cookie-session");
 
-const { getSigner, signUp } = require("./db");
+const { getSigners, getSigner, signUp } = require("./db");
 
 const app = express();
 app.engine("handlebars", engine());
@@ -32,7 +32,7 @@ app.get("/petition", (req, res) => {
 });
 
 app.post("/petition", async (req, res) => {
-    console.log("POST", req.body);
+    // console.log("POST", req.body);
     // console.log("body log", req.body.signature);
     try {
         const newSigner = await signUp(req.body);
@@ -48,17 +48,26 @@ app.post("/petition", async (req, res) => {
 });
 
 app.get("/petition/thank-you", async (req, res) => {
+    const signature_id = req.session.signatures_id;
+    // console.log("signature id GET THANK YOU", signature_id);
     if (!req.session.signatures_id) {
         res.redirect("/petition");
     }
-    const signer = await getSigner();
-    // console.log("response", res);
-    res.render("thankyou", { signer });
+    try {
+        const signer = await getSigner(signature_id);
+        console.log(signer);
+        const signers = await getSigners();
+        console.log(signers);
+        // console.log("response", res);
+        res.render("thankyou", { signers, signer });
+    } catch (error) {
+        console.log("ERROR", error);
+    }
 });
 
 app.get("/petition/signers", async (req, res) => {
-    const signer = await getSigner();
-    res.render("signers", { signer });
+    const signers = await getSigners();
+    res.render("signers", { signers });
     // console.log("response", res);
 });
 

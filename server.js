@@ -96,6 +96,7 @@ app.get("/petition/thank-you", async (req, res) => {
     try {
         const signer = await getSigner(signature_id);
         // console.log(signer);
+        // const signers = await getSigners();
         const signers = await getSigners();
         // console.log(signers);
         // console.log("response", res);

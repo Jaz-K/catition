@@ -13,8 +13,15 @@ async function hashPassword(password) {
 }
 
 function getSigners() {
-    return db.query(`SELECT * FROM users`).then((result) => result.rows);
+    return db
+        .query(
+            `SELECT * FROM users INNER JOIN signatures ON users.id = signatures.user_id`
+        )
+        .then((result) => result.rows);
 }
+/* function getSigners() {
+    return db.query(`SELECT * FROM users`).then((result) => result.rows);
+} */
 
 function getSigner(user_id) {
     return db
@@ -86,6 +93,11 @@ async function login({ email, password }) {
     return foundUser;
 }
 
+/* async function userCount() {
+    const result = await db.query(`SELECT COUNT(*) FROM users`);
+    return result;
+} */
+
 // edit profile
 
 // delete Signer or complete profile
@@ -97,4 +109,5 @@ module.exports = {
     signUp,
     createUser,
     login,
+    // userCount,
 };

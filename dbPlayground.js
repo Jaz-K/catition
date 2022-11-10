@@ -1,13 +1,34 @@
-const { createUser } = require("./db");
+const { createUser, login } = require("./db");
+/* 
+login({ email: "non-existing@example.com", password: "..." }).then(
+    (loggedUser) => console.log(loggedUser)
+);
+
+login({ email: "first@example.com", password: "wrong" }).then((loggedUser) =>
+    console.log(loggedUser)
+);
+
+login({ email: "first@example.com", password: "first" }).then((loggedUser) =>
+    console.log(loggedUser)
+); */
 
 createUser({
+    email: "first@example.de",
+    first_name: "first",
+    last_name: "last",
+    password: "first",
+}).then((newUser) => {
+    console.log("newUser", newUser);
+});
+
+/* createUser({
     first_name: "Susi",
     last_name: "Testify",
     email: "susi@mail.com",
     password: "first",
 }).then((newUser) => {
     console.log("newUser", newUser);
-});
+}); */
 
 /* const { hash, genSalt, compare } = require("bcryptjs");
 

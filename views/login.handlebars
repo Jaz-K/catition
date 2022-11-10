@@ -1,4 +1,19 @@
-<header>
-    <p class="logo">catition</p>
-    <a href="/petition" class="login">Login</a>
-</header>
+{{> header}}
+<main>
+    <section>
+        <form action="/login" method="post">
+        <div>
+            
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" placeholder="Email">
+        </div>
+        <div>
+            
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Email">
+        </div>
+    
+        <button type="submit">Login</button>
+        </form>
+        </section>
+</main>

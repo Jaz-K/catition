@@ -3,7 +3,7 @@ const express = require("express");
 const { engine } = require("express-handlebars");
 const cookieSession = require("cookie-session");
 
-const { getSigners, getSigner, signUp } = require("./db");
+const { getSigners, getSigner, signUp, createUser, login } = require("./db");
 
 const app = express();
 app.engine("handlebars", engine());
@@ -21,8 +21,40 @@ app.use(
     })
 );
 
+app.get("/register", (req, res) => {
+    res.render("register");
+});
+
+app.post("/register", async (req, res) => {
+    try {
+        const newUser = await createUser(req.body);
+        req.session.user_id = newUser.id;
+        res.redirect("/petition");
+    } catch (error) {
+        console.log("ERROR register", error);
+    }
+});
+
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
+app.post("/login", async (req, res) => {
+    try {
+        const loggedUser = await login(req.body);
+        if (!loggedUser) {
+            return;
+        }
+        req.session.user_id = loggedUser.id;
+        res.redirect("/petition");
+    } catch (error) {
+        console.log("ERROR login POST", error);
+    }
+});
+
 app.get("/petition", (req, res) => {
     const signature_id = req.session.signatures_id;
+    // const signature_id = req.session.user_id;
     if (signature_id) {
         res.redirect("/petition/thank-you");
         return;
@@ -32,10 +64,11 @@ app.get("/petition", (req, res) => {
 });
 
 app.post("/petition", async (req, res) => {
-    // console.log("POST", req.body);
+    console.log("POST petition", req.session);
     // console.log("body log", req.body.signature);
     try {
-        const newSigner = await signUp(req.body);
+        const newSigner = await signUp(req.body, req.session);
+        console.log("newSigner", newSigner);
         req.session.signatures_id = newSigner.id;
         // console.log("SESSION", req.session);
         res.redirect("/petition/thank-you");
@@ -48,9 +81,9 @@ app.post("/petition", async (req, res) => {
 });
 
 app.get("/petition/thank-you", async (req, res) => {
-    const signature_id = req.session.signatures_id;
+    const signature_id = req.session.user_id;
     // console.log("signature id GET THANK YOU", signature_id);
-    if (!req.session.signatures_id) {
+    if (!req.session.user_id) {
         res.redirect("/petition");
     }
     try {

@@ -37,7 +37,7 @@ app.post("/petition", async (req, res) => {
     try {
         const newSigner = await signUp(req.body);
         req.session.signatures_id = newSigner.id;
-        console.log("SESSION", req.session);
+        // console.log("SESSION", req.session);
         res.redirect("/petition/thank-you");
     } catch (error) {
         console.log("error", error);
@@ -55,9 +55,9 @@ app.get("/petition/thank-you", async (req, res) => {
     }
     try {
         const signer = await getSigner(signature_id);
-        console.log(signer);
+        // console.log(signer);
         const signers = await getSigners();
-        console.log(signers);
+        // console.log(signers);
         // console.log("response", res);
         res.render("thankyou", { signers, signer });
     } catch (error) {

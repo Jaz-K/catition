@@ -13,7 +13,7 @@ async function hashPassword(password) {
 }
 
 function getSigners() {
-    return db.query(`SELECT * FROM signatures`).then((result) => result.rows);
+    return db.query(`SELECT * FROM users`).then((result) => result.rows);
 }
 
 function getSigner(user_id) {

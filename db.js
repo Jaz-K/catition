@@ -15,7 +15,10 @@ async function hashPassword(password) {
 function getSigners() {
     return db
         .query(
-            `SELECT users.first_name, users.last_name FROM users INNER JOIN signatures ON users.id = signatures.user_id`
+            `SELECT first_name, last_name, age, city, website 
+            FROM users 
+            INNER JOIN signatures ON users.id = signatures.user_id
+            INNER JOIN user_profiles ON users.id = user_profiles.user_id`
         )
         .then((result) => result.rows);
 }

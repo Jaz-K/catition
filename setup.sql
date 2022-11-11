@@ -20,7 +20,7 @@ CREATE TABLE users (
 
 CREATE TABLE user_profiles (
     id SERIAL PRIMARY KEY,
-    age INTEGER DEFAULT NULL,
+    age INTEGER,
     city VARCHAR(50),
     website VARCHAR(255),
     user_id INT NOT NULL UNIQUE REFERENCES users(id)

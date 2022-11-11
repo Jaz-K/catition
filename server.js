@@ -21,6 +21,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: false }));
 
 const { SESSION_SECRET } = require("./secret.json");
+// const { url } = require("inspector");
 app.use(
     cookieSession({
         secret: SESSION_SECRET,
@@ -57,16 +58,19 @@ app.get("/profile", (req, res) => {
 
 app.post("/profile", async (req, res) => {
     try {
-        if (!Number.isInteger(req.body.age)) {
+        /* if (!Number.isInteger(req.body.age)) {
             req.body.age = null;
+        } */
+        let { age } = req.body;
+        if (age == "") {
+            age = null;
         }
+        /* if (!url.startWith("http://")) {
+            "http://" + url;
+        } */
         console.log("PROFILE POST", req.session);
         const profile = await createProfile(req.body, req.session.user_id);
         req.session.user_id = profile.id;
-        /* if (profile.age == "") {
-            return null;
-        } */
-        // console.log("Profile", profile);
         res.redirect("/petition");
     } catch (error) {
         console.log("POST profile error", error);
@@ -74,35 +78,41 @@ app.post("/profile", async (req, res) => {
 });
 
 app.get("/login", (req, res) => {
+    if (req.session.user_id) {
+        res.redirect("/petition");
+        return;
+    }
     res.render("login");
 });
 
 app.post("/login", async (req, res) => {
     try {
-        const loggedUser = await login(req.body);
-        if (!loggedUser) {
+        /* if (!loggedUser) {
             return;
-        }
+        } */
+        const loggedUser = await login(req.body);
         req.session.user_id = loggedUser.id;
         console.log("login req.session", req.session.user_id, loggedUser);
         res.redirect("/petition");
     } catch (error) {
         console.log("ERROR login POST", error);
+        res.render("/login", { error: "Something went wrong" });
     }
 });
 
-app.get("/petition", (req, res) => {
+app.get("/petition", async (req, res) => {
     const user_id = req.session.user_id;
-    // const signature_id = req.session.user_id;
     console.log("PETITION sig_id", req.session);
     if (!user_id) {
         res.redirect("/register");
         return;
     }
-    /* if (signature_id) {
+    const signature_id = await getSigner(user_id);
+    console.log(signature_id);
+    if (("PETITION", signature_id)) {
         res.redirect("/petition/thank-you");
         return;
-    } */
+    }
     // console.log("response", res);
     res.render("petition");
 });
@@ -112,7 +122,7 @@ app.post("/petition", async (req, res) => {
     // console.log("body log", req.body.signature);
     try {
         const newSigner = await signUp(req.body, req.session);
-        console.log("newSigner", newSigner);
+        // console.log("newSigner", newSigner);
         req.session.signatures_id = newSigner.id;
         // console.log("SESSION", req.session);
         res.redirect("/petition/thank-you");
@@ -151,6 +161,13 @@ app.get("/petition/signers", async (req, res) => {
     // console.log("response", res);
 });
 
+/* app.get("/petition/signers/:city", (res, req) => {
+    console.log(req.params);
+    const { city } = req(params)
+    count foundCity = 
+    res.render("/");
+});
+ */
 app.get("/logout", (req, res) => {
     (req.session = null), res.redirect("/register");
 });

@@ -10,7 +10,7 @@ const {
     createUser,
     login,
     createProfile,
-    // findCities,
+    findCities,
     /*  userCount, */
 } = require("./db");
 
@@ -166,8 +166,10 @@ app.get("/petition/signers/:city", (res, req) => {
     const { city } = req.params;
     console.log("PARAMS", city);
 
-    // const foundCity = findCities(city);
-    // res.render("cityUser", { foundCity });
+    const foundCity = findCities(city);
+    console.log(foundCity);
+    res.render("cityUser", { foundCity });
+    // res.render("cityUser");
 });
 
 app.get("/logout", (req, res) => {

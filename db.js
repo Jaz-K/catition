@@ -15,7 +15,7 @@ async function hashPassword(password) {
 function getSigners() {
     return db
         .query(
-            `SELECT * FROM users INNER JOIN signatures ON users.id = signatures.user_id`
+            `SELECT users.first_name, users.last_name FROM users INNER JOIN signatures ON users.id = signatures.user_id`
         )
         .then((result) => result.rows);
 }
@@ -68,6 +68,20 @@ async function createUser({ first_name, last_name, email, password }) {
     );
     return result.rows[0];
 }
+
+// get additional informations
+
+async function createProfile({ age, city, website }, user_id) {
+    const result = await db.query(
+        `
+    INSERT INTO user_profiles (age, city, website, user_id)
+    VALUES ($1, $2, $3, $4)
+    RETURNING *
+    `,
+        [age, city, website, user_id]
+    );
+    return result.rows[0];
+}
 //getUserByEmail
 
 async function getUserByEmail(email) {
@@ -94,8 +108,8 @@ async function login({ email, password }) {
 }
 
 /* async function userCount() {
-    const result = await db.query(`SELECT COUNT(*) FROM users`);
-    return result;
+    const result = await db.query(`SELECT COUNT(id) FROM signatures`);
+    return result.rows;
 } */
 
 // edit profile
@@ -109,5 +123,6 @@ module.exports = {
     signUp,
     createUser,
     login,
+    createProfile,
     // userCount,
 };

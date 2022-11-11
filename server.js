@@ -3,7 +3,15 @@ const express = require("express");
 const { engine } = require("express-handlebars");
 const cookieSession = require("cookie-session");
 
-const { getSigners, getSigner, signUp, createUser, login } = require("./db");
+const {
+    getSigners,
+    getSigner,
+    signUp,
+    createUser,
+    login,
+    createProfile,
+    /*  userCount, */
+} = require("./db");
 
 const app = express();
 app.engine("handlebars", engine());
@@ -23,7 +31,7 @@ app.use(
 
 app.get("/register", (req, res) => {
     if (req.session.user_id) {
-        res.redirect("/petition");
+        res.redirect("/profile");
     } else {
         res.render("register");
     }
@@ -33,9 +41,35 @@ app.post("/register", async (req, res) => {
     try {
         const newUser = await createUser(req.body);
         req.session.user_id = newUser.id;
-        res.redirect("/petition");
+        res.redirect("/profile");
     } catch (error) {
         console.log("ERROR register", error);
+    }
+});
+
+app.get("/profile", (req, res) => {
+    if (!req.session.user_id) {
+        res.redirect("/register");
+    } else {
+        res.render("profile");
+    }
+});
+
+app.post("/profile", async (req, res) => {
+    try {
+        if (!Number.isInteger(req.body.age)) {
+            req.body.age = null;
+        }
+        console.log("PROFILE POST", req.session);
+        const profile = await createProfile(req.body, req.session.user_id);
+        req.session.user_id = profile.id;
+        /* if (profile.age == "") {
+            return null;
+        } */
+        // console.log("Profile", profile);
+        res.redirect("/petition");
+    } catch (error) {
+        console.log("POST profile error", error);
     }
 });
 
@@ -58,13 +92,17 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/petition", (req, res) => {
-    const signature_id = req.session.user_id;
+    const user_id = req.session.user_id;
     // const signature_id = req.session.user_id;
     console.log("PETITION sig_id", req.session);
-    if (signature_id) {
-        res.redirect("/petition/thank-you");
+    if (!user_id) {
+        res.redirect("/register");
         return;
     }
+    /* if (signature_id) {
+        res.redirect("/petition/thank-you");
+        return;
+    } */
     // console.log("response", res);
     res.render("petition");
 });
@@ -99,6 +137,7 @@ app.get("/petition/thank-you", async (req, res) => {
         // const signers = await getSigners();
         const signers = await getSigners();
         // console.log(signers);
+        // console.log(await userCount());
         // console.log("response", res);
         res.render("thankyou", { signers, signer });
     } catch (error) {

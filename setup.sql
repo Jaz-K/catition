@@ -1,4 +1,6 @@
 DROP TABLE IF EXISTS signatures;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS user_profiles;
 
 CREATE TABLE signatures (
     id SERIAL PRIMARY KEY,
@@ -14,8 +16,15 @@ CREATE TABLE users (
     email VARCHAR(50) NOT NULL UNIQUE,
     password_hash VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);
 
+CREATE TABLE user_profiles (
+    id SERIAL PRIMARY KEY,
+    age INTEGER DEFAULT NULL,
+    city VARCHAR(50),
+    website VARCHAR(255),
+    user_id INT NOT NULL UNIQUE REFERENCES users(id)
+)
 /* INSERT INTO
 signatures (
     first_name,

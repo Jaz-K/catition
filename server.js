@@ -10,6 +10,7 @@ const {
     createUser,
     login,
     createProfile,
+    // findCities,
     /*  userCount, */
 } = require("./db");
 
@@ -92,7 +93,7 @@ app.post("/login", async (req, res) => {
         } */
         const loggedUser = await login(req.body);
         req.session.user_id = loggedUser.id;
-        console.log("login req.session", req.session.user_id, loggedUser);
+        // console.log("login req.session", req.session.user_id, loggedUser);
         res.redirect("/petition");
     } catch (error) {
         console.log("ERROR login POST", error);
@@ -161,13 +162,14 @@ app.get("/petition/signers", async (req, res) => {
     // console.log("response", res);
 });
 
-/* app.get("/petition/signers/:city", (res, req) => {
-    console.log(req.params);
-    const { city } = req(params)
-    count foundCity = 
-    res.render("/");
+app.get("/petition/signers/:city", (res, req) => {
+    const { city } = req.params;
+    console.log("PARAMS", city);
+
+    // const foundCity = findCities(city);
+    // res.render("cityUser", { foundCity });
 });
- */
+
 app.get("/logout", (req, res) => {
     (req.session = null), res.redirect("/register");
 });

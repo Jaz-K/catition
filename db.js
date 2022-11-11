@@ -110,6 +110,21 @@ async function login({ email, password }) {
     return foundUser;
 }
 
+//
+
+async function findCities(city) {
+    const result = await db.query(
+        `
+            SELECT first_name, last_name, age, city, website 
+            FROM users 
+            INNER JOIN signatures ON users.id = signatures.user_id
+            INNER JOIN user_profiles ON users.id = user_profiles.user_id
+            WHERE LOWER(city) = LOWER($1)
+            `,
+        [city]
+    );
+    return result.rows;
+}
 /* async function userCount() {
     const result = await db.query(`SELECT COUNT(id) FROM signatures`);
     return result.rows;
@@ -127,5 +142,6 @@ module.exports = {
     createUser,
     login,
     createProfile,
+    findCities,
     // userCount,
 };

@@ -57,3 +57,16 @@ reset.addEventListener("click", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     hiddenInput.value = "";
 });
+
+// CONFIRM DELETION
+/* const deleteUser = document.querySelector("#delete");
+
+deleteUser.addEventListener("click", confirmDelete);
+
+function confirmDelete(event) {
+    let feedback = confirm("Are you sure you want to delete?");
+    if (feedback) {
+    } else {
+        event.preventDefault();
+    }
+} */

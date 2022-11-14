@@ -12,8 +12,8 @@
         <img class="signature" src="{{signature}}" alt="{{first_name}} {{last_name}}">
         {{/signature}}
         <form action="/petition/thank-you" method="post">
-            <button type="submit">Delete Signature</button>
+            <button type="submit" id="delete" onclick="confirmDelete()">Delete Signature</button>
         </form>
     </section>
-    <section><a href="/petition/signers" class="moreSigners">See all {{signers.length}} signers</a></section>
+    <section><a href="/petition/signers" class="moreSigners" >See all {{signers.length}} signers</a></section>
 </main>

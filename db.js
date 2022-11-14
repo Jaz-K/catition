@@ -65,47 +65,18 @@ function signUp({ signature }, { user_id }) {
 }
 
 // DELETE SIGNATURE
-function deleteSignature(id) {
-    return db.query(`DELETE FROM signatures WHERE id = $1`, [id]);
+function deleteSignature(user_id) {
+    return db.query(`DELETE FROM signatures WHERE user_id = $1`, [user_id]);
 }
 
 // DELETE USER
-
-/* async function deleteUser(user_id) {
-    return db
-        .query
-        /*         `DELETE FROM
-users
-user_profiles
-signatures
-WHERE
-users.id = user_id AND
-user_profiles 
-` */
-
-/* `DELETE FROM users WHERE id = $1`, [user_id],
-        `DELETE FROM signatures WHERE id = $1`, [user_id],
-        `DELETE FROM user_profiles WHERE id = $1`, [user_id]; */
-/*     `JOIN signatures ON users.id = signatures.user_id
-    JOIN user_profiles ON users.id = user_profiles.user_id
-    WHERE user.id = $1
-    `,
-        [user_id]
-        ();
-} */
-
-/* function signUp({ first_name, last_name, signature }) {
-    return db
-        .query(
-            `
-    INSERT INTO signatures (first_name, last_name, signature)
-    VALUES ($1,$2,$3)
-    RETURNING *
-    `,
-            [first_name, last_name, signature]
-        )
-        .then((result) => result.rows[0]);
-} */
+async function deleteUser(id) {
+    return db.query(`DELETE FROM users WHERE id = $1`, [id]);
+}
+// DELETE PROFILE
+async function deleteProfile(user_id) {
+    return db.query(`DELETE FROM user_profiles WHERE user_id = $1`, [user_id]);
+}
 
 // CREATE USER
 async function createUser({ first_name, last_name, email, password }) {
@@ -137,33 +108,28 @@ async function createProfile({ age, city, website }, user_id) {
 
 // EDIT USER
 
-async function editUser(
-    { first_name, last_name, email, password },
-    { user_id }
-) {
+async function editUser({ first_name, last_name, email, user_id }) {
     const result = await db.query(
         `UPDATE users
-    SET first_name = $1, last_name = $2, email = $3, password = $4
-    WHERE user_id = $5
+    SET first_name = $1, last_name = $2, email = $3
+    WHERE users.id = $4
     `,
-        [first_name, last_name, email, password, user_id]
+        [first_name, last_name, email, user_id]
     );
     return result.rows[0];
 }
 
-async function editProfile({ age, city, website }, { user_id }) {
+async function editProfile({ age, city, website, user_id }) {
     const result = await db.query(
-        `UPDATE user_profiles
-    SET age = $1, city = $2, website = $3
-    WHERE user_id = $4`,
+        ` INSERT INTO
+    user_profiles (age, city, website, user_id )
+    VALUES($1, $2,$3,$4)
+    ON CONFLICT (user_id)
+    DO UPDATE SET 
+    age = $1, city = $2, website = $3`,
         [age, city, website, user_id]
     );
     return result.rows[0];
-}
-
-async function edit() {
-    let promise = await Promise.all([editUser(), editProfile()]);
-    return promise;
 }
 
 // GET USER BY EMAIL
@@ -215,10 +181,6 @@ async function findCities(city) {
     return result.rows;
 } */
 
-// edit profile
-
-// delete Signer or complete profile
-
 //
 module.exports = {
     getSigners,
@@ -229,8 +191,10 @@ module.exports = {
     login,
     createProfile,
     findCities,
-    edit,
+    editUser,
+    editProfile,
     deleteSignature,
-    // deleteUser,
+    deleteUser,
+    deleteProfile,
     // userCount,
 };

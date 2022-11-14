@@ -15,7 +15,8 @@ CREATE TABLE users (
 CREATE TABLE signatures (
     id SERIAL PRIMARY KEY,
     signature VARCHAR NOT NULL CHECK (signature != ''),
-    user_id INT UNIQUE REFERENCES users(id)
+    user_id INT NOT NULL UNIQUE REFERENCES users(id)
+    ON DELETE CASCADE
 );
 
 CREATE TABLE user_profiles (
@@ -24,6 +25,7 @@ CREATE TABLE user_profiles (
     city VARCHAR(50),
     website VARCHAR(255),
     user_id INT NOT NULL UNIQUE REFERENCES users(id)
+    ON DELETE CASCADE
 )
 /* INSERT INTO
 signatures (

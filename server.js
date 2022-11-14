@@ -14,6 +14,9 @@ const {
     findCities,
     deleteSignature,
     deleteUser,
+    deleteProfile,
+    editUser,
+    editProfile,
     // edit,
     /*  userCount, */
 } = require("./db");
@@ -26,6 +29,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: false }));
 
 const { SESSION_SECRET } = require("./secret.json");
+// const { profile } = require("console");
 // const { url } = require("inspector");
 app.use(
     cookieSession({
@@ -82,23 +86,26 @@ app.get("/profile/edit", async (req, res) => {
     res.render("edit", { user });
 });
 
-/* app.post("/profile/edit", async (req, res) => {
+app.post("/profile/edit", async (req, res) => {
     // console.log("POST edit", req.body, req.session);
     try {
-        const editUser = await edit(req.body, req.session);
-        console.log(editUser);
-        res.render("edit");
+        const { user_id } = req.session;
+        await editUser({ ...req.body, user_id });
+        await editProfile({ ...req.body, user_id });
+        res.redirect("/petition/thank-you");
     } catch (error) {
         console.log("Error edituser", error);
     }
-}); */
+});
 
 app.post("/profile/delete", async (req, res) => {
     try {
         const { user_id } = req.session;
-        console.log("userId", user_id);
         await deleteUser(user_id);
-        (req.session = null), res.redirect("/register");
+        await deleteProfile(user_id);
+        await deleteSignature(user_id);
+        req.session = null;
+        res.redirect("/register");
     } catch (error) {
         console.log("ERROR delete user", error);
     }
@@ -199,11 +206,11 @@ app.get("/petition/thank-you", async (req, res) => {
 });
 
 app.post("/petition/thank-you", async (req, res) => {
-    // console.log("POST thank you", req.session);
+    console.log("POST thank you", req.session);
     try {
-        const { signatures_id } = req.session;
+        const { user_id } = req.session;
         // console.log("signatures_id", signatures_id);
-        await deleteSignature(signatures_id);
+        await deleteSignature(user_id);
         req.session.signatures_id = null;
         res.redirect("/petition");
     } catch (error) {

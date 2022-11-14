@@ -22,16 +22,34 @@ function getSigners() {
         )
         .then((result) => result.rows);
 }
+
+function getUserById(user_id) {
+    return db
+        .query(
+            `
+    SELECT first_name, last_name, email, age, city, website, signature
+    FROM users
+    FULL JOIN signatures ON users.id = signatures.user_id
+    FULL JOIN user_profiles ON users.id = user_profiles.user_id
+    WHERE users.id = $1
+    `,
+            [user_id]
+        )
+        .then((result) => result.rows[0]);
+}
 /* function getSigners() {
     return db.query(`SELECT * FROM users`).then((result) => result.rows);
 } */
 
-function getSigner(user_id) {
-    return db
-        .query(`SELECT * FROM signatures WHERE user_id = $1`, [user_id])
-        .then((result) => result.rows[0]);
+async function getSignature(user_id) {
+    const result = await db.query(
+        `SELECT * FROM signatures WHERE user_id = $1`,
+        [user_id]
+    );
+    return result.rows[0];
 }
-// sign up
+
+// SIGN PETITION
 
 function signUp({ signature }, { user_id }) {
     return db
@@ -45,6 +63,37 @@ function signUp({ signature }, { user_id }) {
         )
         .then((result) => result.rows[0]);
 }
+
+// DELETE SIGNATURE
+function deleteSignature(id) {
+    return db.query(`DELETE FROM signatures WHERE id = $1`, [id]);
+}
+
+// DELETE USER
+
+/* async function deleteUser(user_id) {
+    return db
+        .query
+        /*         `DELETE FROM
+users
+user_profiles
+signatures
+WHERE
+users.id = user_id AND
+user_profiles 
+` */
+
+/* `DELETE FROM users WHERE id = $1`, [user_id],
+        `DELETE FROM signatures WHERE id = $1`, [user_id],
+        `DELETE FROM user_profiles WHERE id = $1`, [user_id]; */
+/*     `JOIN signatures ON users.id = signatures.user_id
+    JOIN user_profiles ON users.id = user_profiles.user_id
+    WHERE user.id = $1
+    `,
+        [user_id]
+        ();
+} */
+
 /* function signUp({ first_name, last_name, signature }) {
     return db
         .query(
@@ -58,7 +107,7 @@ function signUp({ signature }, { user_id }) {
         .then((result) => result.rows[0]);
 } */
 
-// createUser
+// CREATE USER
 async function createUser({ first_name, last_name, email, password }) {
     const hashedPassword = await hashPassword(password);
     const result = await db.query(
@@ -72,7 +121,7 @@ async function createUser({ first_name, last_name, email, password }) {
     return result.rows[0];
 }
 
-// get additional informations
+// ADDITIONAL INFORMATIONS
 
 async function createProfile({ age, city, website }, user_id) {
     const result = await db.query(
@@ -81,11 +130,43 @@ async function createProfile({ age, city, website }, user_id) {
     VALUES ($1, $2, $3, $4)
     RETURNING *
     `,
+        [+age, city, website, user_id]
+    );
+    return result.rows[0];
+}
+
+// EDIT USER
+
+async function editUser(
+    { first_name, last_name, email, password },
+    { user_id }
+) {
+    const result = await db.query(
+        `UPDATE users
+    SET first_name = $1, last_name = $2, email = $3, password = $4
+    WHERE user_id = $5
+    `,
+        [first_name, last_name, email, password, user_id]
+    );
+    return result.rows[0];
+}
+
+async function editProfile({ age, city, website }, { user_id }) {
+    const result = await db.query(
+        `UPDATE user_profiles
+    SET age = $1, city = $2, website = $3
+    WHERE user_id = $4`,
         [age, city, website, user_id]
     );
     return result.rows[0];
 }
-//getUserByEmail
+
+async function edit() {
+    let promise = await Promise.all([editUser(), editProfile()]);
+    return promise;
+}
+
+// GET USER BY EMAIL
 
 async function getUserByEmail(email) {
     const result = await db.query(`SELECT * FROM users WHERE email = $1`, [
@@ -94,7 +175,7 @@ async function getUserByEmail(email) {
     return result.rows[0];
 }
 
-// login
+// LOGIN
 
 async function login({ email, password }) {
     const foundUser = await getUserByEmail(email);
@@ -110,21 +191,25 @@ async function login({ email, password }) {
     return foundUser;
 }
 
-//
+// FIND SIGNER WITH SAME CITY
 
 async function findCities(city) {
-    const result = await db.query(
-        `
+    return db
+        .query(
+            `
             SELECT first_name, last_name, age, city, website 
             FROM users 
             INNER JOIN signatures ON users.id = signatures.user_id
             INNER JOIN user_profiles ON users.id = user_profiles.user_id
             WHERE LOWER(city) = LOWER($1)
             `,
-        [city]
-    );
-    return result.rows;
+            [city]
+        )
+        .then((result) => result.rows);
 }
+
+// SIGNER COUNT
+
 /* async function userCount() {
     const result = await db.query(`SELECT COUNT(id) FROM signatures`);
     return result.rows;
@@ -137,11 +222,15 @@ async function findCities(city) {
 //
 module.exports = {
     getSigners,
-    getSigner,
+    getSignature,
+    getUserById,
     signUp,
     createUser,
     login,
     createProfile,
     findCities,
+    edit,
+    deleteSignature,
+    // deleteUser,
     // userCount,
 };

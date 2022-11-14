@@ -1,25 +1,27 @@
-{{ log 'signers' signers}}
+{{!-- {{ log 'signers' signers}} --}}
 
 {{> header}}
 <main>
-    <h1>signers</h1>
-    <ul>
-        {{#each signers}}
+    <section>
+        <h1>signers</h1>
+        <ul>
+            {{#each signers}}
 
-            <li><p>🐈 {{#if website}}
-                        <a href={{website}}>{{first_name}} {{last_name}}</a>
-                        {{else}}
-                        {{first_name}} {{last_name}}
-                        {{/if}}
-                        {{#if age}}
-                        | {{age}}
-                        {{/if}}
-                        {{#if city}}
-                        | <a href="/petition/signers/{{city}}">{{city}}</a>
-                        {{/if}}
-                </p>
-            </li>
-                   
-        {{/each}}
-    </ul>
+                <li>🐈 {{#if website}}
+                            <a href={{website}}>{{first_name}} {{last_name}}</a>
+                            {{else}}
+                            {{first_name}} {{last_name}}
+                            {{/if}}
+                            {{#if age}}
+                            | {{age}}
+                            {{/if}}
+                            {{#if city}}
+                            | <a href="/petition/signers/{{city}}">{{city}}</a>
+                            {{/if}}
+                    
+                </li>
+                    
+            {{/each}}
+        </ul>
+    </section>
 </main>

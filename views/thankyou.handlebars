@@ -1,15 +1,19 @@
+{{!-- {{ log 'signers' signers}} --}}
 {{> header}}
 
 
 <main>
     <section>
-        {{#signer}}
+        {{#signature}}
     <h1>Thank you {{first_name}}</h1>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae quae
         sint impedit nostrum eaque vero nemo quidem temporibus hic omnis quam,
         nobis culpa reiciendis nulla, beatae consequatur tenetur saepe. Facere!</p>
         <img class="signature" src="{{signature}}" alt="{{first_name}} {{last_name}}">
-        {{/signer}}
+        {{/signature}}
+        <form action="/petition/thank-you" method="post">
+            <button type="submit">Delete Signature</button>
+        </form>
     </section>
     <section><a href="/petition/signers" class="moreSigners">See all {{signers.length}} signers</a></section>
 </main>

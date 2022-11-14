@@ -1,25 +1,18 @@
 {{> header}}
 <main>
-    <h1>Cats for every household</h1>
-    <h2>Benefits of having a cat</h2>
-    <p>Good for your heart lowery your stress level, improving Sleep quality, fewer allergies
-    </p>
+    <section>
+        <h1>Cats for every household</h1>
+        <h2>Benefits of having a cat</h2>
+        <p>Good for your heart lowery your stress level, improving Sleep quality, fewer allergies
+        </p>
+    </section>
     <section>
         <form action="/petition" method="POST">
+            <label for="sig">Signature</label>
             <div>
-           {{!--  <label for="fname">First Name</label>
-            <input type="text" name="first_name" id="fname" required />
-            </div>
-            <div>
-                <label for="lname">Last Name</label>
-            <input type="text" name="last_name" id="lname" required />
-            </div> --}}
-            <div>
-                <label for="sig">Signature</label>
             <input type="hidden" name="signature" id="sig" value=""  />
             <canvas id="signature-field"></canvas>
             </div>
-
             <button type="submit">Submit</button>
             <button type="reset" id="reset">Reset</button>
             {{#if error}}
@@ -28,5 +21,3 @@
         </form>
     </section>
 </main>
-
-<script src="/canvas.js"></script>

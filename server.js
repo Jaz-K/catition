@@ -287,4 +287,7 @@ app.all("*", (req, res) => {
     res.status(404).render("pageNotFound");
 });
 
-app.listen(8080, () => console.log("The Server is listen to 8080"));
+app.listen(process.env.PORT || 8080, () =>
+    console.log("The Server is listen to 8080")
+);
+// app.listen(8080, () => console.log("The Server is listen to 8080"));

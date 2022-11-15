@@ -8,7 +8,7 @@
             {{#each signers}}
 
                 <li><img src="/assets/pawprint.svg" alt="pawprint" class="pawprint"> {{#if website}}
-                            <a href={{website}}>{{first_name}} {{last_name}}</a>
+                            <a href="{{website}}" class="linkstyle" target="_blank">{{first_name}} {{last_name}}</a>
                             {{else}}
                             {{first_name}} {{last_name}}
                             {{/if}}

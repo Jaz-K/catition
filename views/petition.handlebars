@@ -1,4 +1,4 @@
-{{> header}}
+{{> header_without_thankyou}}
 <main>
     <section>
         <h1>Cats for every household</h1>
@@ -13,8 +13,10 @@
             <input type="hidden" name="signature" id="sig" value=""  />
             <canvas id="signature-field"></canvas>
             </div>
+            <div class="sign_buttons">
             <button type="submit">Submit</button>
-            <button type="reset" id="reset">Reset</button>
+            <button type="reset" id="reset">Reset</button></div>
+            
             {{#if error}}
                 <p class="error">{{error}}</p>
             {{/if}}

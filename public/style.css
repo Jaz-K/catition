@@ -82,6 +82,8 @@ header {
 }
 .linkstyle {
     color: inherit;
+    text-underline-offset: 0.25rem;
+    text-decoration-color: rgb(149, 112, 175);
 }
 a.nav {
     text-decoration: transparent;
@@ -210,16 +212,8 @@ button:active,
 .benefits {
     font-family: "Poppins", Arial, Helvetica, sans-serif;
     font-style: italic;
+    color: rgb(149, 112, 175);
 }
-
-/* .btn_base {
-    color: rgb(255, 255, 255);
-    padding: 0.25rem 1.5rem;
-    font-size: 1.25rem;
-    border-radius: 1rem;
-    text-decoration: none;
-    border: 2px solid rgb(255, 255, 255);
-} */
 
 .logo {
     height: 3rem;
@@ -241,9 +235,14 @@ button:active,
     border: 0.063rem solid rgb(255, 255, 255);
 }
 
-.moreSigners {
+.moreSigners,
+#reset {
     margin-left: 2rem;
     display: inline-block;
+}
+div.sign_buttons,
+div.sign_buttons button {
+    margin: 0;
 }
 
 img.signature {
@@ -310,10 +309,16 @@ input[type="number"] {
         width: 100%;
     }
 
-    .moreSigners {
+    .moreSigners,
+    #reset {
+        margin-top: 2rem;
         text-align: center;
         text-decoration: none;
         margin-left: 0;
         display: block;
+    }
+
+    div.sign_buttons {
+        margin-top: 2rem;
     }
 }

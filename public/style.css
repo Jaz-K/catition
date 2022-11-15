@@ -1,3 +1,43 @@
+@font-face {
+    font-family: "comfortaabold";
+    src: url("/fonts/comfortaa_bold-webfont.woff2") format("woff2"),
+        url("/fonts/comfortaa_bold-webfont.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "comfortaaregular";
+    src: url("/fonts/comfortaa_regular-webfont.woff2") format("woff2"),
+        url("/fonts/comfortaa_regular-webfont.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "comfortaathin";
+    src: url("/fonts/comfortaa_thin-webfont.woff2") format("woff2"),
+        url("/fonts/comfortaa_thin-webfont.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "poppinsregular";
+    src: url("poppins-regular-webfont.woff2") format("woff2"),
+        url("poppins-regular-webfont.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "poppinsitalic";
+    src: url("poppins-italic-webfont.woff2") format("woff2"),
+        url("poppins-italic-webfont.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -7,11 +47,14 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background-image: url("https://images.unsplash.com/photo-1478098711619-5ab0b478d6e6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80");
-    background-color: rgb(29, 45, 87);
-    background-size: cover;
-    background-repeat: no-repeat;
+    background-attachment: fixed;
+    /* background-image: url("https://images.unsplash.com/photo-1478098711619-5ab0b478d6e6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"); */
+    /* background-color: rgb(29, 45, 87); */
+    /*     background-size: cover;
+    background-repeat: no-repeat; */
+    background: rgb(28, 21, 58);
 }
+
 html {
     font-family: "Poppins", Arial, Helvetica, sans-serif;
     font-size: 16px;
@@ -19,54 +62,70 @@ html {
 }
 
 main {
-    max-width: 800px;
+    /* max-width: 800px; */
     margin: auto;
     display: flex;
     flex-direction: column;
     flex: 1;
     padding: 0.5rem 1.25rem;
 }
-
-/* section{
-
-} */
+main.twoCol {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 10rem auto;
+    gap: 2rem;
+}
 
 header {
     display: flex;
     justify-content: space-between;
 }
-
+.linkstyle {
+    color: inherit;
+}
 a.nav {
     text-decoration: transparent;
-    color: rgb(255, 255, 255);
+    color: inherit;
     transition: text-decoration 0.3s ease-in;
 }
 
 a.nav:hover {
     text-decoration: underline;
 }
+a.nav.active {
+    font-weight: 600;
+    color: rgb(149, 112, 175);
+    text-decoration: underline;
+}
+
 nav {
     display: flex;
-    align-items: baseline;
-    gap: 1rem;
+    align-items: center;
+    gap: 2rem;
     padding: 1.25rem 1.25rem;
 }
 h1 {
+    grid-column: 1/-1;
     margin-top: 5rem;
     font-size: 3rem;
     text-transform: uppercase;
     font-family: "Comfortaa", Arial, Helvetica, sans-serif;
+    letter-spacing: 0.125rem;
 }
 h2 {
     font-size: 2.5rem;
     font-weight: 400;
+    line-height: 1;
+    margin-bottom: 2rem;
 }
 form {
     margin-top: 4rem;
     display: flex;
     flex-direction: column;
 }
-
+form.deleteDB {
+    margin: 0;
+}
 form div {
     margin: 1rem 0;
 }
@@ -75,7 +134,7 @@ form input {
     background-color: transparent;
     border: none;
     border-bottom: 1px solid rgb(255, 255, 255);
-    width: 250px;
+    width: 100%;
     padding: 0.5rem 0;
     color: rgb(255, 255, 255);
     font-size: 1.5rem;
@@ -86,6 +145,14 @@ form input:focus-visible {
     border: none;
     outline: none;
     border-bottom: 1px solid rgb(255, 255, 255);
+}
+label {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.25);
+}
+
+form.deleteProfile {
+    margin-top: 1rem;
 }
 
 ul {
@@ -99,61 +166,103 @@ ul li {
 }
 
 footer {
+    margin-top: 4rem;
+    height: 4rem;
     text-align: center;
 }
 
-button {
-    margin-right: 1rem;
-    border: none;
-    border-radius: 0.25rem;
-    padding: 0.25rem 1.5rem;
+button,
+.btn_base,
+.logout,
+.login {
+    text-decoration: none;
+    display: inline-block;
+    background-color: transparent;
+    margin-top: 2rem;
+    border: 0.063rem solid rgb(255, 255, 255);
+    border-radius: 1.25rem;
+    padding: 0.5rem 1.5rem;
     font-size: 1.25rem;
     font-family: "Comfortaa", Arial, Helvetica, sans-serif;
+    color: rgb(255, 255, 255);
+    transition: background-color 0.2s ease-in;
+}
+button:hover,
+.btn_base:hover,
+.login:hover {
+    background-color: rgb(149, 112, 175);
+    border: 0.063rem solid rgb(149, 112, 175);
+}
+
+button:active,
+.btn_base:active {
+    background-color: rgb(255, 255, 255);
+    border: 0.063rem solid rgb(255, 255, 255);
+    color: rgb(28, 21, 58);
 }
 
 #signature-field {
+    width: 100%;
     background-color: rgba(255, 255, 255, 0.25);
     border-radius: 5px;
     cursor: crosshair;
 }
-.btn_base {
+.benefits {
+    font-family: "Poppins", Arial, Helvetica, sans-serif;
+    font-style: italic;
+}
+
+/* .btn_base {
     color: rgb(255, 255, 255);
     padding: 0.25rem 1.5rem;
     font-size: 1.25rem;
     border-radius: 1rem;
     text-decoration: none;
     border: 2px solid rgb(255, 255, 255);
-}
+} */
 
 .logo {
     height: 3rem;
 }
 
+.login {
+    margin: 0;
+}
 .logout {
-    color: rgb(255, 255, 255);
-    background-color: rgb(172, 25, 20);
-    padding: 0.25rem 1.5rem;
-    font-size: 1.25rem;
-    border-radius: 1rem;
-    text-decoration: none;
+    color: rgb(28, 21, 58);
+    background-color: rgb(149, 112, 175);
+    border: 0.063rem solid rgb(149, 112, 175);
+    margin: 0;
     align-self: center;
+}
+.logout:hover {
+    color: rgb(255, 255, 255);
+    background-color: transparent;
+    border: 0.063rem solid rgb(255, 255, 255);
 }
 
 .moreSigners {
-    margin-top: 2rem;
+    margin-left: 2rem;
     display: inline-block;
-    color: rgb(255, 255, 255);
-    padding: 0.25rem 1.5rem;
-    font-size: 1.25rem;
-    border-radius: 1rem;
-    text-decoration: none;
-    border: 2px solid rgb(255, 255, 255);
-}
-img.signature {
-    margin: 2rem 0;
-    display: block;
 }
 
+img.signature {
+    margin-top: 3rem;
+    width: 100%;
+}
+img.cat_img {
+    width: 100%;
+}
+img.pawprint {
+    position: relative;
+    top: 0.5rem;
+    width: 2rem;
+    margin-right: 1rem;
+}
+img.editimg {
+    width: 100%;
+    margin-top: 2rem;
+}
 .error {
     color: rgb(172, 25, 20);
     margin-top: 1rem;
@@ -169,12 +278,42 @@ input[type="number"] {
 }
 
 @media screen and (max-width: 720px) {
+    header {
+        display: flex;
+        flex-direction: column;
+    }
+    nav {
+        display: flex;
+        justify-content: center;
+    }
+
     h1 {
         margin-top: 5rem;
         font-size: 2rem;
+        line-height: 1.3;
     }
     h2 {
         font-size: 1.5rem;
         font-weight: 400;
+    }
+    form input {
+        width: 100%;
+        font-size: 1rem;
+    }
+
+    main.oneCol {
+        grid-template-columns: 100%;
+        grid-template-rows: auto;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    .moreSigners {
+        text-align: center;
+        text-decoration: none;
+        margin-left: 0;
+        display: block;
     }
 }

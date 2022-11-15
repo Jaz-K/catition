@@ -3,11 +3,11 @@
 {{> header}}
 <main>
     <section>
-        <h1>signers</h1>
+        <h1>All supporters</h1>
         <ul>
             {{#each signers}}
 
-                <li>🐈 {{#if website}}
+                <li><img src="/assets/pawprint.svg" alt="pawprint" class="pawprint"> {{#if website}}
                             <a href={{website}}>{{first_name}} {{last_name}}</a>
                             {{else}}
                             {{first_name}} {{last_name}}
@@ -16,11 +16,9 @@
                             | {{age}}
                             {{/if}}
                             {{#if city}}
-                            | <a href="/petition/signers/{{city}}">{{city}}</a>
+                            | <a href="/catition/signers/{{city}}" class="linkstyle">{{city}}</a>
                             {{/if}}
-                    
-                </li>
-                    
+                </li>        
             {{/each}}
         </ul>
     </section>

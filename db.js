@@ -37,9 +37,16 @@ function getUserById(user_id) {
         )
         .then((result) => result.rows[0]);
 }
-/* function getSigners() {
-    return db.query(`SELECT * FROM users`).then((result) => result.rows);
-} */
+
+async function getCurrentUserProfile(user_id) {
+    const result = await db.query(
+        `
+    SELECT * FROM user_profiles WHERE user_id = $1
+    `,
+        [user_id]
+    );
+    return result.rows[0];
+}
 
 async function getSignature(user_id) {
     const result = await db.query(
@@ -50,13 +57,12 @@ async function getSignature(user_id) {
 }
 
 // SIGN PETITION
-
 function signUp({ signature }, { user_id }) {
     return db
         .query(
             `
     INSERT INTO signatures (signature, user_id)
-    VALUES ($1,$2)
+    VALUES ($1, $2)
     RETURNING *
     `,
             [signature, user_id]
@@ -101,7 +107,7 @@ async function createProfile({ age, city, website }, user_id) {
     VALUES ($1, $2, $3, $4)
     RETURNING *
     `,
-        [+age, city, website, user_id]
+        [age || null, city, website, user_id]
     );
     return result.rows[0];
 }
@@ -128,6 +134,22 @@ async function editProfile({ age, city, website, user_id }) {
     DO UPDATE SET 
     age = $1, city = $2, website = $3`,
         [age, city, website, user_id]
+    );
+    return result.rows[0];
+}
+
+// EDIT PASSWORD
+async function editPassword(password, id) {
+    console.log("Password id", password, id);
+    const hashedPassword = await hashPassword(password);
+    console.log("hashedPassword");
+    const result = await db.query(
+        `
+        UPDATE users
+        SET password_hash = $1
+        WHERE users.id = $2
+        `,
+        [hashedPassword, id]
     );
     return result.rows[0];
 }
@@ -174,18 +196,12 @@ async function findCities(city) {
         .then((result) => result.rows);
 }
 
-// SIGNER COUNT
-
-/* async function userCount() {
-    const result = await db.query(`SELECT COUNT(id) FROM signatures`);
-    return result.rows;
-} */
-
 //
 module.exports = {
     getSigners,
     getSignature,
     getUserById,
+    getCurrentUserProfile,
     signUp,
     createUser,
     login,
@@ -196,5 +212,5 @@ module.exports = {
     deleteSignature,
     deleteUser,
     deleteProfile,
-    // userCount,
+    editPassword,
 };

@@ -1,19 +1,17 @@
-{{!-- {{ log 'signers' signers}} --}}
 {{> header}}
 
 
 <main>
     <section>
         {{#signature}}
-    <h1>Thank you {{first_name}}</h1>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae quae
-        sint impedit nostrum eaque vero nemo quidem temporibus hic omnis quam,
-        nobis culpa reiciendis nulla, beatae consequatur tenetur saepe. Facere!</p>
+        <h1>Thanks for your support!</h1>
+        <h2>{{first_name}}</h2>
+        <p>Now you are part of the furry movement. Everybody deserves a cat!</p>
         <img class="signature" src="{{signature}}" alt="{{first_name}} {{last_name}}">
         {{/signature}}
-        <form action="/petition/thank-you" method="post">
-            <button type="submit" id="delete" onclick="confirmDelete()">Delete Signature</button>
+        <form action="/catition/thank-you/delete-sig" method="POST" class="deleteDB">
+           <div> <button type="submit">Delete Signature</button>
+           <a href="/catition/signers" class="moreSigners btn_base">See all {{signers.length}} signers</a></div>
         </form>
     </section>
-    <section><a href="/petition/signers" class="moreSigners" >See all {{signers.length}} signers</a></section>
 </main>

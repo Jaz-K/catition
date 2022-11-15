@@ -1,17 +1,12 @@
 {{> header_out}}
 <main>
+    <h1>Cats for every household</h1>
     <section>
-        <h1>Cats for every household</h1>
-        <h2>Benefits of having a cat</h2>
-        <p>Good for your heart lowery your stress level, improving Sleep quality, fewer allergies
-        </p>
-    </section>
-    <section>
-        <form action="/login" method="post">
+        <form action="/catition/login" method="post">
             <label for="email">Email</label>
             <input type="text" name="email" id="email" value="{{#if error}}{{email}}{{/if}}">
             <label for="password">Password</label>
-            <input type="password" name="password" id="password" value="{{#if error}}{{password}}{{/if}}"">
+            <input type="password" name="password" id="password" value="{{#if error}}{{password}}{{/if}}">
         <button type="submit">Login</button>
         </form>
         {{#if error}}

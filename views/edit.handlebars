@@ -1,18 +1,18 @@
 {{!-- {{ log 'user' user }} --}}
 {{> header}}
 
-<main>
+<main class="twoCol oneCol">
+    <h1>Edit your profile</h1>
     <section>
-        <form action="/profile/edit" method="POST">
+        
+        <form action="/catition/profile/edit" method="POST">
         {{#user}}
          <label for="fname">First name</label>
-            <input type="text" name="first_name" id="fname" value="{{first_name}}">
+            <input type="text" name="first_name" id="fname" value="{{first_name}}" required>
             <label for="lname">Last name</label>
-            <input type="text" name="last_name" id="lname" value="{{last_name}}">
+            <input type="text" name="last_name" id="lname" value="{{last_name}}" required>
             <label for="email">Email</label>
-            <input type="email" name="email" id="email" value="{{email}}">
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" value="">
+            <input type="email" name="email" id="email" value="{{email}}" required>
             <label for="age">Age</label>
             <input type="number" name="age" id="age" value="{{age}}">
             <label for="city">City</label>
@@ -20,11 +20,32 @@
             <label for="website">Website</label>
             <input type="url" name="website" id="website" value="{{website}}">
         {{/user}}
-            <button type="submit">Edit</button>
+            <button type="submit">Edit profile</button>
+            {{#if erroredit}}
+                <p class="error">{{error}}</p>
+            {{/if}}
         </form>
+        
+    </section>
 
-        <form action="/profile/delete" method="POST">
-        <button type="submit" id="delete" onclick="confirmDelete()">Remove Profile</button>
+    <section>
+        <form action="/catition/profile/change-password" method="POST">
+            <label for="password">New password</label>
+            <input type="password" name="password" id="password_new" required>
+            <label for="password">Repeat password</label>
+            <input type="password" name="password_repeat" id="password_repeat" required>
+        <button type="submit">Change password</button>
+        {{#if error}}
+                <p class="error">{{error}}</p>
+            {{/if}}
+        </form> 
+        <img class="editimg" src="/assets/catnontable.svg" alt="cat sleeps on desk">
+        <form action="/catition/profile/delete" method="POST" class="deleteProfile">
+        <button type="submit" >Remove Profile</button>
+        {{#if errordel}}
+                <p class="error">{{error}}</p>
+            {{/if}}
         </form>
     </section>
+
 </main>

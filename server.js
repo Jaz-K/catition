@@ -7,6 +7,7 @@ const {
     getSigners,
     getSignature,
     getUserById,
+    getCurrentUserProfile,
     signUp,
     createUser,
     login,
@@ -17,7 +18,7 @@ const {
     deleteProfile,
     editUser,
     editProfile,
-    // edit,
+    editPassword,
     /*  userCount, */
 } = require("./db");
 
@@ -29,8 +30,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: false }));
 
 const { SESSION_SECRET } = require("./secret.json");
-// const { profile } = require("console");
-// const { url } = require("inspector");
+
 app.use(
     cookieSession({
         secret: SESSION_SECRET,
@@ -39,97 +39,144 @@ app.use(
     })
 );
 
-app.get("/register", (req, res) => {
+app.get("/catition", (req, res) => {
     if (req.session.user_id) {
-        res.redirect("/profile");
+        res.redirect("/catition/sign");
     } else {
         res.render("register");
     }
 });
 
-app.post("/register", async (req, res) => {
+app.post("/catition", async (req, res) => {
     try {
         const newUser = await createUser(req.body);
+        console.log("New User", newUser);
         req.session.user_id = newUser.id;
-        res.redirect("/profile");
+        res.redirect("/catition/more");
     } catch (error) {
-        console.log("ERROR register", error);
+        console.log("ERROR delete user", error);
+        res.render("edit", {
+            error: "Something went wrong, please try again",
+        });
     }
 });
 
-app.get("/profile", (req, res) => {
-    if (!req.session.user_id) {
-        res.redirect("/register");
+app.get("/catition/more", async (req, res) => {
+    console.log("req.session GET more", req.session);
+    const { user_id } = req.session;
+    if (!user_id) {
+        res.redirect("/catition");
+        return;
+    }
+    const userProfiles = await getCurrentUserProfile(user_id);
+    // console.log("userProfiles", userProfiles);
+
+    if (userProfiles == undefined) {
+        res.render("more_infos");
     } else {
-        res.render("profile");
+        res.redirect("/catition/sign");
     }
 });
 
-app.post("/profile", async (req, res) => {
+app.post("/catition/more", async (req, res) => {
     try {
         /* if (!url.startWith("http://")) {
             "http://" + url;
         } */
-        // console.log("PROFILE POST", req.session);
-        const profile = await createProfile(req.body, req.session.user_id);
-        req.session.user_id = profile.id;
-        res.redirect("/petition");
+        console.log("session id more", req.session);
+        await createProfile(req.body, req.session.user_id);
+        // req.session.signatures_id = profile.id;
+        res.redirect("/catition/sign");
     } catch (error) {
         console.log("POST profile error", error);
     }
 });
 
-app.get("/profile/edit", async (req, res) => {
+app.get("/catition/profile", async (req, res) => {
     const { user_id } = req.session;
     const user = await getUserById(user_id);
     // console.log("edit", user_id);
     res.render("edit", { user });
 });
 
-app.post("/profile/edit", async (req, res) => {
+app.post("/catition/profile/edit", async (req, res) => {
     // console.log("POST edit", req.body, req.session);
     try {
         const { user_id } = req.session;
         await editUser({ ...req.body, user_id });
         await editProfile({ ...req.body, user_id });
-        res.redirect("/petition/thank-you");
+        res.redirect("/catition/thank-you");
     } catch (error) {
         console.log("Error edituser", error);
+        res.render("edit", {
+            erroredit: "Something went wrong, please try again",
+        });
     }
 });
 
-app.post("/profile/delete", async (req, res) => {
+app.post("/catition/profile/delete", async (req, res) => {
     try {
         const { user_id } = req.session;
         await deleteUser(user_id);
         await deleteProfile(user_id);
         await deleteSignature(user_id);
         req.session = null;
-        res.redirect("/register");
+        res.redirect("/catition");
     } catch (error) {
         console.log("ERROR delete user", error);
+        res.render("edit", {
+            errordel: "Something went wrong, please try again",
+        });
     }
 });
 
-app.get("/login", (req, res) => {
+app.post("/catition/profile/change-password", async (req, res) => {
+    try {
+        const { user_id } = req.session;
+        const { password, password_repeat } = req.body;
+        const user = await getUserById(user_id);
+
+        if (password !== password_repeat) {
+            res.render("edit", {
+                user,
+                error: "The passwords are not the same, try again.",
+            });
+        }
+
+        console.log(password, user_id);
+        if (password === password_repeat) {
+            await editPassword(password, user_id);
+            console.log("They are the same");
+            res.redirect("/catition/profile");
+        }
+    } catch (error) {
+        console.log("ERROR change password", error);
+        res.render("edit", {
+            error: "Something went wrong, please try again",
+        });
+    }
+});
+
+app.get("/catition/login", (req, res) => {
     if (req.session.user_id) {
-        res.redirect("/petition");
+        res.redirect("/catition/sign");
         return;
     }
     res.render("login");
 });
 
-app.post("/login", async (req, res) => {
+app.post("/catition/login", async (req, res) => {
     try {
         const loggedUser = await login(req.body);
         req.session.user_id = loggedUser.id;
 
         const signature_id = await getSignature(loggedUser.id);
-        const sigId = signature_id.id;
-        req.session.signatures_id = sigId;
+        if (signature_id) {
+            const sigId = signature_id.id;
+            req.session.signatures_id = sigId;
+        }
 
-        res.redirect("/petition");
-        return;
+        res.redirect("/catition/sign");
     } catch (error) {
         console.log("ERROR login POST", error);
         const { email, password } = req.body;
@@ -141,36 +188,34 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.get("/petition", async (req, res) => {
+app.get("/catition/sign", async (req, res) => {
     try {
         const user_id = req.session.user_id;
         const sig_id = req.session.signatures_id;
-
+        console.log("req.session GET sign", req.session);
         // console.log("PETITION sig_id", req.session);
         if (!user_id) {
-            res.redirect("/register");
+            res.redirect("/catition");
             return;
         }
         if (sig_id) {
-            res.redirect("/petition/thank-you");
+            res.redirect("/catition/thank-you");
             return;
         }
-
         res.render("petition");
     } catch (error) {
         console.log("ERROR petition", error);
     }
 });
 
-app.post("/petition", async (req, res) => {
-    // console.log("POST petition", req.session);
-    // console.log("body log", req.body.signature);
+app.post("/catition/sign", async (req, res) => {
     try {
+        console.log("req.session sign post", req.session);
         const newSigner = await signUp(req.body, req.session);
-        // console.log("newSigner", newSigner);
+        console.log("newSigner", newSigner);
         req.session.signatures_id = newSigner.id;
         // console.log("SESSION", req.session);
-        res.redirect("/petition/thank-you");
+        res.redirect("/catition/thank-you");
     } catch (error) {
         console.log("ERROR petition POST", error);
         res.render("petition", {
@@ -179,17 +224,17 @@ app.post("/petition", async (req, res) => {
     }
 });
 
-app.get("/petition/thank-you", async (req, res) => {
+app.get("/catition/thank-you", async (req, res) => {
     try {
         const { user_id } = req.session;
         const { signatures_id } = req.session;
         // console.log("signature id GET THANK YOU", signature_id);
         if (!user_id) {
-            res.redirect("/register");
+            res.redirect("/catition");
             return;
         }
         if (!signatures_id) {
-            res.redirect("/petition");
+            res.redirect("/catition/sign");
             return;
         }
         const signature = await getUserById(user_id); //!!!! rename variable
@@ -205,26 +250,26 @@ app.get("/petition/thank-you", async (req, res) => {
     }
 });
 
-app.post("/petition/thank-you", async (req, res) => {
+app.post("/catition/thank-you/delete-sig", async (req, res) => {
     console.log("POST thank you", req.session);
     try {
         const { user_id } = req.session;
         // console.log("signatures_id", signatures_id);
         await deleteSignature(user_id);
         req.session.signatures_id = null;
-        res.redirect("/petition");
+        res.redirect("/catition/sign");
     } catch (error) {
         console.log("ERROR thank you", error);
     }
 });
 
-app.get("/petition/signers", async (req, res) => {
+app.get("/catition/signers", async (req, res) => {
     const signers = await getSigners();
     res.render("signers", { signers });
     // console.log("response", res);
 });
 
-app.get("/petition/signers/:city", async (req, res) => {
+app.get("/catition/signers/:city", async (req, res) => {
     const { city } = req.params;
     // console.log("PARAMS", city);
 
@@ -234,9 +279,12 @@ app.get("/petition/signers/:city", async (req, res) => {
     // res.render("cityUser");
 });
 
-app.get("/logout", (req, res) => {
-    // console.log("logout", req.session);
-    (req.session = null), res.redirect("/register");
+app.get("/catition/logout", (req, res) => {
+    (req.session = null), res.redirect("/catition");
+});
+
+app.all("*", (req, res) => {
+    res.status(404).render("pageNotFound");
 });
 
 app.listen(8080, () => console.log("The Server is listen to 8080"));

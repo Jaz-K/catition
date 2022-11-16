@@ -105,10 +105,11 @@ main.notfound {
     align-items: center;
 }
 main.twoCol {
+    margin-bottom: 10rem;
     max-width: 75rem;
     display: grid;
     grid-template-columns: 47% 47%;
-    grid-template-rows: 18rem auto;
+    grid-template-rows: 10rem auto;
     gap: 6%;
 }
 

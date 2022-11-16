@@ -80,10 +80,11 @@ app.get("/more", async (req, res) => {
 
 app.post("/more", async (req, res) => {
     try {
-        /* const url = req.body.website;
-        if (!url.startWith("http://" || "http://")) {
+        const url = req.body.website.toString();
+
+        if (!url.startsWith("http" || "https")) {
             "http://" + url;
-        } */
+        }
         console.log("session id more", req.session);
         await createProfile(req.body, req.session.user_id);
         // req.session.signatures_id = profile.id;
@@ -102,11 +103,12 @@ app.get("/profile", async (req, res) => {
 
 app.post("/profile/edit", async (req, res) => {
     try {
-        /*    const url = req.body.website;
-        if (!url.startWith("http://" || "http://")) {
+        const url = req.body.website.toString();
+
+        if (!url.startsWith("http" || "https")) {
             "http://" + url;
         }
- */
+
         const { user_id } = req.session;
         console.log("website body", req.body.website);
 

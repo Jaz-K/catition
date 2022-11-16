@@ -8,15 +8,15 @@
         <form action="/catition/profile/edit" method="POST">
         {{#user}}
          <label for="fname">First name</label>
-            <input type="text" name="first_name" id="fname" value="{{first_name}}" required pattern="[A-Za-zÄÖÜäöüß]">
+            <input type="text" name="first_name" id="fname" value="{{first_name}}" required>
             <label for="lname">Last name</label>
-            <input type="text" name="last_name" id="lname" value="{{last_name}}" required pattern="[A-Za-zÄÖÜäöüß]">
+            <input type="text" name="last_name" id="lname" value="{{last_name}}" required >
             <label for="email">Email</label>
             <input type="email" name="email" id="email" value="{{email}}" required>
             <label for="age">Age</label>
             <input type="number" name="age" id="age" value="{{age}}" pattern="[0-9]">
             <label for="city">City</label>
-            <input type="text" name="city" id="city" value="{{city}}" pattern="[A-Za-zÄÖÜäöüß]">
+            <input type="text" name="city" id="city" value="{{city}}">
             <label for="website">Website</label>
             <input type="url" name="website" id="website" value="{{website}}">
         {{/user}}

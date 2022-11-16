@@ -1,5 +1,6 @@
 const path = require("path");
 const express = require("express");
+const helmet = require("helmet");
 const { engine } = require("express-handlebars");
 const cookieSession = require("cookie-session");
 
@@ -31,6 +32,7 @@ app.use(express.urlencoded({ extended: false }));
 
 const { SESSION_SECRET } = require("./secret.json");
 
+app.use(helmet());
 app.use(
     cookieSession({
         secret: SESSION_SECRET,

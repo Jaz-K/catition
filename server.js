@@ -83,7 +83,7 @@ app.post("/more", async (req, res) => {
         const url = req.body.website;
 
         if (!url.startsWith("http" || "https")) {
-            "http://" + url;
+            req.body.website = "http://" + url;
         }
 
         console.log("session id more", req.session);
@@ -107,7 +107,7 @@ app.post("/profile/edit", async (req, res) => {
         const url = req.body.website;
 
         if (!url.startsWith("http" || "https")) {
-            "http://" + url;
+            req.body.website = "http://" + url;
         }
 
         const { user_id } = req.session;

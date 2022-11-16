@@ -5,7 +5,7 @@
     <h1>Edit your profile</h1>
     <section>
         
-        <form action="/catition/profile/edit" method="POST">
+        <form action="/profile/edit" method="POST">
         {{#user}}
          <label for="fname">First name</label>
             <input type="text" name="first_name" id="fname" value="{{first_name}}" required>
@@ -29,7 +29,7 @@
     </section>
 
     <section>
-        <form action="/catition/profile/change-password" method="POST">
+        <form action="/profile/change-password" method="POST">
             <label for="password">New password</label>
             <input type="password" name="password" id="password_new" required>
             <label for="password">Repeat password</label>
@@ -40,7 +40,7 @@
             {{/if}}
         </form> 
         <img class="editimg" src="/assets/catnontable.svg" alt="cat sleeps on desk">
-        <form action="/catition/profile/delete" method="POST" class="deleteProfile">
+        <form action="/profile/delete" method="POST" class="deleteProfile">
         <button type="submit" >Remove Profile</button>
         {{#if errordel}}
                 <p class="error">{{error}}</p>

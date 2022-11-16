@@ -105,6 +105,7 @@ main.notfound {
     align-items: center;
 }
 main.twoCol {
+    max-width: 75rem;
     display: grid;
     grid-template-columns: 47% 47%;
     grid-template-rows: 15rem auto;

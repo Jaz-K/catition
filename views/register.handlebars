@@ -1,26 +1,28 @@
-{{!-- {{> header_out}} --}}
 {{> header_out}}
 <main class="twoCol oneCol">
+    <section class="registerTopText">
     <h1>Cats for every household</h1>
+    <p>We want cats for everyone.</p>
+    </section>
     <section>
         <img  class="cat_img" src="/assets/white_cat_illu.png" alt="cat">
     </section>
     <section>
         <h2>Benefits of having a cat</h2>
         <ul class="benefits">
-            <li>Lower your stress level.</li>
-            <li>Structure your day.</li>
-            <li>Boost your mood.</li>
-            <li>Improve your sleep quality.</li>
+            <li><img src="/assets/pawprint.svg" alt="pawprint" class="pawprint"> Lower your stress level.</li>
+            <li><img src="/assets/pawprint.svg" alt="pawprint" class="pawprint"> Structure your day.</li>
+            <li><img src="/assets/pawprint.svg" alt="pawprint" class="pawprint"> Boost your mood.</li>
+            <li><img src="/assets/pawprint.svg" alt="pawprint" class="pawprint"> Improve your sleep quality.</li>
         </ul>
         <form action="/catition" method="post">
-                <label for="fname">First name:</label>
+                <label for="fname">First name</label>
                 <input type="text" name="first_name" id="fname" required>
-                <label for="lname">Last name:</label>
-                <input type="text" name="last_name" id="lname" required>
-                <label for="email">Email:</label>
+                <label for="lname">Last name</label>
+                <input type="text" name="last_name" id="lname" required >
+                <label for="email">Email</label>
                 <input type="email" name="email" id="email" required>   
-                <label for="password">Password:</label>
+                <label for="password">Password</label>
                 <input type="password" name="password" id="password" required>
             <button type="submit">Register</button>
             {{#if error}}

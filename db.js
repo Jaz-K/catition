@@ -1,41 +1,48 @@
 const spicedPg = require("spiced-pg");
 const { hash, genSalt, compare } = require("bcryptjs");
 
-const { DATABASE_USERNAME, DATABASE_PASSWORD } = require("./secret.json");
-const DATABASE_NAME = "spiced-petition";
-const DATABASE_URL = `postgres:${DATABASE_USERNAME}:${DATABASE_PASSWORD}@localhost:5432/${DATABASE_NAME}`;
+let db;
 
-const db = spicedPg(DATABASE_URL);
+if (process.env.DATABASE_URL) {
+    //on render.com
+    db = spicedPg(process.env.DATABASE_URL);
+} else {
+    // on my computer
+    const { DATABASE_USERNAME, DATABASE_PASSWORD } = require("./secret.json");
+    const DATABASE_NAME = process.env.DB || "spiced-petition";
+
+    db = spicedPg(
+        `postgres:${DATABASE_USERNAME}:${DATABASE_PASSWORD}@localhost:5432/${DATABASE_NAME}`
+    );
+}
 
 async function hashPassword(password) {
     const salt = await genSalt();
     return hash(password, salt);
 }
 
-function getSigners() {
-    return db
-        .query(
-            `SELECT first_name, last_name, age, city, website 
+async function getSigners() {
+    const result = await db.query(
+        `SELECT first_name, last_name, age, city, website 
             FROM users 
             INNER JOIN signatures ON users.id = signatures.user_id
             INNER JOIN user_profiles ON users.id = user_profiles.user_id`
-        )
-        .then((result) => result.rows);
+    );
+    return result.rows;
 }
 
-function getUserById(user_id) {
-    return db
-        .query(
-            `
+async function getUserById(user_id) {
+    const result = await db.query(
+        `
     SELECT first_name, last_name, email, age, city, website, signature
     FROM users
     FULL JOIN signatures ON users.id = signatures.user_id
     FULL JOIN user_profiles ON users.id = user_profiles.user_id
     WHERE users.id = $1
     `,
-            [user_id]
-        )
-        .then((result) => result.rows[0]);
+        [user_id]
+    );
+    return result.rows[0];
 }
 
 async function getCurrentUserProfile(user_id) {
@@ -57,17 +64,16 @@ async function getSignature(user_id) {
 }
 
 // SIGN PETITION
-function signUp({ signature }, { user_id }) {
-    return db
-        .query(
-            `
+async function signUp({ signature }, { user_id }) {
+    const result = await db.query(
+        `
     INSERT INTO signatures (signature, user_id)
     VALUES ($1, $2)
     RETURNING *
     `,
-            [signature, user_id]
-        )
-        .then((result) => result.rows[0]);
+        [signature, user_id]
+    );
+    return result.rows[0];
 }
 
 // DELETE SIGNATURE
@@ -76,11 +82,11 @@ function deleteSignature(user_id) {
 }
 
 // DELETE USER
-async function deleteUser(id) {
+function deleteUser(id) {
     return db.query(`DELETE FROM users WHERE id = $1`, [id]);
 }
 // DELETE PROFILE
-async function deleteProfile(user_id) {
+function deleteProfile(user_id) {
     return db.query(`DELETE FROM user_profiles WHERE user_id = $1`, [user_id]);
 }
 

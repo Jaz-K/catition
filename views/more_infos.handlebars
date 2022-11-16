@@ -7,10 +7,10 @@
     </section>
     <section>
         <form action="/catition/more" method="POST">
-                <label for="age">Age</label>
-                <input type="number" name="age" id="age">
+                <label for="age">Age</label pattern="[0-9]">
+                <input type="number" name="age" id="age" pattern="[0-9]">
                 <label for="city">City</label>
-                <input type="text" name="city" id="city">
+                <input type="text" name="city" id="city" pattern="[A-Za-zÄÖÜäöüß]">
                 <label for="website">website</label>
                 <input type="url" name="website" id="website">
             <button type="submit">Continue</button>

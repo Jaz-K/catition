@@ -80,7 +80,8 @@ app.get("/catition/more", async (req, res) => {
 
 app.post("/catition/more", async (req, res) => {
     try {
-        /* if (!url.startWith("http://")) {
+        /* const url = req.body.website;
+        if (!url.startWith("http://" || "http://")) {
             "http://" + url;
         } */
         console.log("session id more", req.session);
@@ -100,9 +101,15 @@ app.get("/catition/profile", async (req, res) => {
 });
 
 app.post("/catition/profile/edit", async (req, res) => {
-    // console.log("POST edit", req.body, req.session);
     try {
+        /*    const url = req.body.website;
+        if (!url.startWith("http://" || "http://")) {
+            "http://" + url;
+        }
+ */
         const { user_id } = req.session;
+        console.log("website body", req.body.website);
+
         await editUser({ ...req.body, user_id });
         await editProfile({ ...req.body, user_id });
         res.redirect("/catition/thank-you");

@@ -2,16 +2,19 @@
 
 
 <main>
-    <section>
+    <section class="thankyou">
         {{#signature}}
         <h1>Thanks for your support!</h1>
-        <h2>{{first_name}} you are now part of the furry movement.</h2>
-        <p>Tell everyone else</p>
+        <h2><span class="higlight">{{first_name}}</span> you are now part of the movement. Share it with your friends.</h2>
         <img class="signature" src="{{signature}}" alt="{{first_name}} {{last_name}}">
         {{/signature}}
         <form action="/thank-you/delete-sig" method="POST" class="deleteDB">
            <div> <button type="submit">Delete Signature</button>
            <a href="/signers" class="moreSigners btn_base">See all {{signers.length}} signers</a></div>
         </form>
+    </section>
+
+    <section class="thankyou">
+        <img class="cat_img thankyouimg" src="/assets/cats-waiting.png" alt="">
     </section>
 </main>

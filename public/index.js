@@ -7,7 +7,7 @@ function setup() {
     const hiddenInput = document.querySelector("#sig");
 
     canvas.width = 800;
-    canvas.height = 70;
+    canvas.height = 80;
     ctx.strokeStyle = "#fff";
     ctx.lineWidth = 2;
 

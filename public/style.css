@@ -108,7 +108,7 @@ main.twoCol {
     max-width: 75rem;
     display: grid;
     grid-template-columns: 47% 47%;
-    grid-template-rows: 15rem auto;
+    grid-template-rows: 18rem auto;
     gap: 6%;
 }
 
@@ -342,6 +342,7 @@ input[type="number"] {
         align-items: center;
     }
     main.oneCol {
+        margin-bottom: 15rem;
         grid-template-columns: 100%;
         grid-template-rows: auto;
     }

@@ -113,6 +113,10 @@ main.twoCol {
     gap: 6%;
 }
 
+main.hightHeadline {
+    grid-template-rows: 17rem auto;
+}
+
 section.thankyou {
     max-width: 50rem;
 }

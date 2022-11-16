@@ -342,6 +342,7 @@ input[type="number"] {
         align-items: center;
     }
     main.oneCol {
+        gap: 2rem;
         margin-bottom: 15rem;
         grid-template-columns: 100%;
         grid-template-rows: auto;

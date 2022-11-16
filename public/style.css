@@ -279,7 +279,10 @@ button:active,
     margin-left: 2rem;
     display: inline-block;
 }
-div.sign_buttons,
+div.sign_buttons {
+    margin-top: 2rem;
+}
+
 div.sign_buttons button,
 .login,
 form.deleteDB {

@@ -84,7 +84,7 @@ app.post("/more", async (req, res) => {
     try {
         const url = req.body.website;
 
-        if (!url.startsWith("http" || "https")) {
+        if (url && !url.startsWith("http" || "https")) {
             req.body.website = "http://" + url;
         }
 
@@ -108,7 +108,7 @@ app.post("/profile/edit", async (req, res) => {
     try {
         const url = req.body.website;
 
-        if (!url.startsWith("http" || "https")) {
+        if (url && !url.startsWith("http" || "https")) {
             req.body.website = "http://" + url;
         }
 

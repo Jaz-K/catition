@@ -16,11 +16,9 @@ const {
     findCities,
     deleteSignature,
     deleteUser,
-    deleteProfile,
     editUser,
     editProfile,
     editPassword,
-    /*  userCount, */
 } = require("./db");
 
 const app = express();
@@ -130,8 +128,6 @@ app.post("/profile/delete", async (req, res) => {
     try {
         const { user_id } = req.session;
         await deleteUser(user_id);
-        await deleteProfile(user_id);
-        await deleteSignature(user_id);
         req.session = null;
         res.redirect("/");
     } catch (error) {
@@ -222,11 +218,9 @@ app.get("/sign", async (req, res) => {
 
 app.post("/sign", async (req, res) => {
     try {
-        console.log("req.session sign post", req.session);
         const newSigner = await signUp(req.body, req.session);
-        console.log("newSigner", newSigner);
         req.session.signatures_id = newSigner.id;
-        // console.log("SESSION", req.session);
+
         res.redirect("/thank-you");
     } catch (error) {
         console.log("ERROR petition POST", error);
@@ -240,7 +234,7 @@ app.get("/thank-you", async (req, res) => {
     try {
         const { user_id } = req.session;
         const { signatures_id } = req.session;
-        // console.log("signature id GET THANK YOU", signature_id);
+
         if (!user_id) {
             res.redirect("/");
             return;
@@ -249,13 +243,10 @@ app.get("/thank-you", async (req, res) => {
             res.redirect("/sign");
             return;
         }
-        const signature = await getUserById(user_id); //!!!! rename variable
-        // console.log(signer);
-        // const signers = await getSigners();
+        const signature = await getUserById(user_id);
+
         const signers = await getSigners();
-        // console.log(signers);
-        // console.log(await userCount());
-        // console.log("response", res);
+
         res.render("thankyou", { signers, signature });
     } catch (error) {
         console.log("ERROR GET thank you", error);
@@ -278,17 +269,13 @@ app.post("/thank-you/delete-sig", async (req, res) => {
 app.get("/signers", async (req, res) => {
     const signers = await getSigners();
     res.render("signers", { signers });
-    // console.log("response", res);
 });
 
 app.get("/signers/:city", async (req, res) => {
     const { city } = req.params;
-    // console.log("PARAMS", city);
 
     const foundCity = await findCities(city);
-    // console.log(foundCity);
     res.render("cityUser", { city: city, foundCity });
-    // res.render("cityUser");
 });
 
 app.get("/logout", (req, res) => {

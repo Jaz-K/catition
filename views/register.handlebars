@@ -1,4 +1,5 @@
 {{> header_out}}
+
 <main class="twoCol oneCol hightHeadline">
     <section class="registerTopText">
     <h1>Cats for every household. Now!</h1>
@@ -16,13 +17,14 @@
             <li><img src="/assets/pawprint.svg" alt="pawprint" class="pawprint"> Improve your sleep quality.</li>
         </ul>
         <form action="/" method="post">
-                <label for="fname">First name</label>
-                <input type="text" name="first_name" id="fname" required>
-                <label for="lname">Last name</label>
+                <label for="fname">First name*</label>
+                <input type="text" name="first_name" id="fname" oninvalid="this.setCustomValidity('Enter User Name Here')"
+                oninput="this.setCustomValidity('This is some text')" required >
+                <label for="lname">Last name*</label>
                 <input type="text" name="last_name" id="lname" required>
-                <label for="email">Email</label>
+                <label for="email">Email*</label>
                 <input type="email" name="email" id="email" required>   
-                <label for="password">Password</label>
+                <label for="password">Password*</label>
                 <input type="password" name="password" id="password" required>
             <button type="submit">Register</button>
             {{#if error}}

@@ -27,10 +27,25 @@ Note: This page can be viewed mobile, but it's not possible to set a proper sign
 
 ### Registration with information
 
-###
+<kbd><img src="public/assets/gifs/01_catition_registration.gif" width="80vw"/></kbd>
+
+### Optional Infos
+
+<kbd><img src="public/assets/gifs/02_catition_optional_infos.gif" width="80vw"/></kbd>
+
+### Signature
+
+<kbd><img src="public/assets/gifs/03_catition_signature.gif" width="80vw"/></kbd>
+
+### Signers
+
+<kbd><img src="public/assets/gifs/04_catition_signers.gif" width="80vw"/></kbd>
 
 ### Settings
 
+<kbd><img src="public/assets/gifs/05_catition_settings.gif" width="80vw"/></kbd>
+
 ### More
 
+-   Logo created by me
 -   Illustrations by me and Draw.io
